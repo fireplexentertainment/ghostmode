@@ -445,64 +445,131 @@
       line-height: 1.7;
     }
 
-    .grid {
+    .features-section {
+      padding: 100px 0 80px;
+    }
+
+    .section-label {
+      display: inline-flex;
+      margin-bottom: 14px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      color: #c4b5fd;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(12, 1fr);
       gap: 18px;
     }
 
-    .card {
+    .feature-card {
+      grid-column: span 4;
       padding: 24px;
-      border-radius: var(--radius-lg);
-      background: var(--card);
-      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(16px);
-      box-shadow: 0 10px 40px rgba(0,0,0,0.18);
-      transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.16);
       position: relative;
       overflow: hidden;
+      transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
     }
 
-    .card::before {
+    .feature-card::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.08), transparent 45%);
+      background: linear-gradient(135deg, rgba(255,255,255,0.09), transparent 40%);
       opacity: 0;
       transition: opacity 0.25s ease;
     }
 
-    .card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(255,255,255,0.2);
-      background: rgba(255,255,255,0.10);
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.1);
     }
 
-    .card:hover::before {
+    .feature-card:hover::before {
       opacity: 1;
     }
 
-    .icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 16px;
+    .feature-card-large {
+      grid-column: span 8;
+      min-height: 260px;
+    }
+
+    .feature-card-wide {
+      grid-column: span 12;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .feature-icon {
+      width: 52px;
+      height: 52px;
       display: grid;
       place-items: center;
-      margin-bottom: 16px;
-      background: linear-gradient(135deg, rgba(139,92,246,0.25), rgba(34,211,238,0.18));
-      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 18px;
+      margin-bottom: 18px;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.24), rgba(34, 211, 238, 0.16));
+      border: 1px solid rgba(255, 255, 255, 0.1);
       font-size: 22px;
     }
 
-    .card h3 {
-      margin-bottom: 10px;
+    .feature-card h3 {
       font-size: 18px;
+      margin-bottom: 10px;
     }
 
-    .card p {
-      color: var(--muted);
+    .feature-card p {
+      color: #cbd5e1;
       line-height: 1.7;
       font-size: 14px;
+    }
+
+    .feature-tag {
+      display: inline-flex;
+      margin-top: 16px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(139, 92, 246, 0.18);
+      color: #ddd6fe;
+      font-size: 13px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .feature-metrics {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .feature-metrics div {
+      min-width: 140px;
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .feature-metrics strong {
+      display: block;
+      font-size: 1.5rem;
+      margin-bottom: 6px;
+    }
+
+    .feature-metrics span {
+      color: #cbd5e1;
+      font-size: 13px;
+      line-height: 1.4;
     }
 
     .cta-panel {
@@ -555,7 +622,7 @@
       50% { transform: translateY(-12px) scale(1.03); }
     }
 
-    @media (max-width: 960px) {
+    @media (max-width: 980px) {
       .hero {
         grid-template-columns: 1fr;
         min-height: auto;
@@ -567,6 +634,17 @@
       }
 
       .section-head {
+        flex-direction: column;
+        align-items: start;
+      }
+
+      .feature-card,
+      .feature-card-large,
+      .feature-card-wide {
+        grid-column: span 6;
+      }
+
+      .feature-card-wide {
         flex-direction: column;
         align-items: start;
       }
@@ -591,6 +669,17 @@
 
       .mini-grid {
         grid-template-columns: 1fr;
+      }
+
+      .section-head {
+        flex-direction: column;
+        align-items: start;
+      }
+
+      .feature-card,
+      .feature-card-large,
+      .feature-card-wide {
+        grid-column: span 12;
       }
 
       .cta-panel {
@@ -712,51 +801,87 @@
       </div>
     </section>
 
-    <section class="section" id="features">
+    <section class="features-section section" id="features">
       <div class="section-head">
-        <h2>Designed for momentum</h2>
+        <div>
+          <span class="section-label">FEATURES</span>
+          <h2>Everything you need to stay in the zone</h2>
+        </div>
         <p>
-          Every part of the interface is built to keep attention on the task, reduce friction,
-          and make progress feel visible and rewarding.
+          Ghost Mode combines focus tools, motivation systems, and analytics into one polished experience.
         </p>
       </div>
 
-      <div class="grid">
-        <div class="card">
-          <div class="icon">⏱</div>
+      <div class="features-grid">
+        <article class="feature-card feature-card-large">
+          <div class="feature-icon">⏱</div>
           <h3>Focus Sessions</h3>
-          <p>Start distraction-free work blocks and track how your productivity changes over time.</p>
-        </div>
+          <p>
+            Start distraction-free sessions, track your flow, and build a stronger daily work rhythm with clean session controls.
+          </p>
+          <div class="feature-tag">Deep work mode</div>
+        </article>
 
-        <div class="card">
-          <div class="icon">🍅</div>
+        <article class="feature-card">
+          <div class="feature-icon">🍅</div>
           <h3>Pomodoro Mode</h3>
-          <p>Use structured 25/5 cycles with short and long breaks to keep your energy stable.</p>
-        </div>
+          <p>
+            Use classic focus cycles with short and long breaks to stay productive without burning out.
+          </p>
+        </article>
 
-        <div class="card">
-          <div class="icon">🎯</div>
+        <article class="feature-card">
+          <div class="feature-icon">🎯</div>
           <h3>Focus Missions</h3>
-          <p>Daily missions turn consistency into a game and give you a clear target each day.</p>
-        </div>
+          <p>
+            Daily missions turn consistency into a game and help you stay motivated every single day.
+          </p>
+        </article>
 
-        <div class="card">
-          <div class="icon">⚡</div>
+        <article class="feature-card">
+          <div class="feature-icon">⚡</div>
           <h3>XP & Levels</h3>
-          <p>Gain experience, unlock ranks, and build a stronger focus identity over time.</p>
-        </div>
+          <p>
+            Earn experience points, unlock ranks, and visually see your progress grow over time.
+          </p>
+        </article>
 
-        <div class="card">
-          <div class="icon">📊</div>
+        <article class="feature-card">
+          <div class="feature-icon">📊</div>
           <h3>Analytics</h3>
-          <p>Review focus score, heatmaps, best days, and habits to understand your momentum.</p>
-        </div>
+          <p>
+            Review focus score, heatmaps, best days, and time patterns to understand your productivity.
+          </p>
+        </article>
 
-        <div class="card">
-          <div class="icon">🎨</div>
+        <article class="feature-card">
+          <div class="feature-icon">🎨</div>
           <h3>Themes</h3>
-          <p>Switch between cyberpunk, nature, space, and premium looks to match your style.</p>
-        </div>
+          <p>
+            Switch between cyberpunk, nature, space, and premium themes to match your style.
+          </p>
+        </article>
+
+        <article class="feature-card feature-card-wide">
+          <div>
+            <div class="feature-icon">🛡</div>
+            <h3>Distraction Shield</h3>
+            <p>
+              Keep your attention locked by reducing interruptions and helping you return to the task faster.
+            </p>
+          </div>
+
+          <div class="feature-metrics">
+            <div>
+              <strong>98%</strong>
+              <span>focus consistency</span>
+            </div>
+            <div>
+              <strong>24/7</strong>
+              <span>availability</span>
+            </div>
+          </div>
+        </article>
       </div>
 
       <div class="cta-panel">
