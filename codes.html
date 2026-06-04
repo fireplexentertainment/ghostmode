@@ -1,1 +1,781 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KOD MERKEZİ</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050810;
+    --bg2: #080d1a;
+    --panel: #0c1426;
+    --border: #1a2a4a;
+    --accent: #00d4ff;
+    --accent2: #ff6b35;
+    --gold: #ffd700;
+    --xp: #00ff88;
+    --text: #c8d8f0;
+    --text-dim: #4a6080;
+    --expired-soon: #ff9900;
+    --glow: 0 0 20px rgba(0,212,255,0.3);
+    --glow-gold: 0 0 15px rgba(255,215,0,0.4);
+  }
 
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Scan line effect */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(transparent, rgba(0,212,255,0.15), transparent);
+    animation: scan 6s linear infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  @keyframes scan {
+    0% { top: -2% }
+    100% { top: 102% }
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* HEADER */
+  header {
+    text-align: center;
+    margin-bottom: 50px;
+    padding: 40px 20px;
+    position: relative;
+  }
+
+  .header-line {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    margin: 16px 0;
+  }
+
+  .title-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--accent);
+    text-transform: uppercase;
+    opacity: 0.7;
+    animation: fadeIn 1s ease forwards;
+  }
+
+  h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(28px, 6vw, 56px);
+    font-weight: 900;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #ffffff 0%, var(--accent) 50%, #7ec8ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    filter: drop-shadow(0 0 30px rgba(0,212,255,0.5));
+    animation: fadeSlideDown 0.8s ease forwards;
+    margin: 8px 0;
+  }
+
+  .subtitle {
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    animation: fadeIn 1.2s ease forwards;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 24px;
+    animation: fadeIn 1.4s ease forwards;
+  }
+
+  .stat-chip {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 6px 16px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    position: relative;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+
+  .stat-chip span {
+    color: var(--accent);
+    font-weight: bold;
+  }
+
+  /* Section headers */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 40px 0 20px;
+    animation: fadeIn 1s ease forwards;
+  }
+
+  .section-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+
+  .section-label.permanent { color: var(--accent); }
+  .section-label.limited { color: var(--expired-soon); }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+  }
+  .permanent .section-line { background: linear-gradient(90deg, var(--accent), transparent); }
+  .limited .section-line { background: linear-gradient(90deg, var(--expired-soon), transparent); }
+
+  .section-icon {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  .permanent .section-icon { background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+  .limited .section-icon { background: var(--expired-soon); box-shadow: 0 0 10px var(--expired-soon); }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.7); }
+  }
+
+  /* CODE CARDS */
+  .codes-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .code-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 18px 22px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateX(-20px);
+    animation: slideIn 0.5s ease forwards;
+  }
+
+  .code-card:hover {
+    border-color: var(--accent);
+    background: #0f1d35;
+    box-shadow: var(--glow), inset 0 0 30px rgba(0,212,255,0.05);
+    transform: translateX(4px);
+  }
+
+  .code-card.limited-card:hover {
+    border-color: var(--expired-soon);
+    box-shadow: 0 0 20px rgba(255,153,0,0.3), inset 0 0 30px rgba(255,153,0,0.05);
+  }
+
+  /* Left accent bar */
+  .code-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .code-card.limited-card::before { background: var(--expired-soon); }
+
+  .code-card:hover::before { opacity: 1; }
+
+  /* Shimmer on hover */
+  .code-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0,212,255,0.04), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .code-card:hover::after { left: 150%; }
+
+  .code-left { display: flex; flex-direction: column; gap: 6px; }
+
+  .code-string {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: #ffffff;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  .code-card:hover .code-string { color: var(--accent); }
+  .code-card.limited-card:hover .code-string { color: var(--expired-soon); }
+
+  .code-rewards {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .reward-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+
+  .reward-badge.xp { color: var(--xp); }
+  .reward-badge.gold { color: var(--gold); }
+
+  .reward-icon {
+    font-size: 13px;
+  }
+
+  .reward-value {
+    font-weight: bold;
+    font-size: 13px;
+  }
+
+  .reward-sep {
+    color: var(--border);
+    font-size: 10px;
+  }
+
+  /* Copy button */
+  .copy-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+    white-space: nowrap;
+  }
+
+  .copy-btn:hover {
+    background: rgba(0,212,255,0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .code-card.limited-card .copy-btn:hover {
+    background: rgba(255,153,0,0.1);
+    border-color: var(--expired-soon);
+    color: var(--expired-soon);
+  }
+
+  .copy-btn.copied {
+    color: var(--xp);
+    border-color: var(--xp);
+    background: rgba(0,255,136,0.08);
+  }
+
+  /* Expiry date badge */
+  .expiry-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,153,0,0.08);
+    border: 1px solid rgba(255,153,0,0.25);
+    padding: 4px 10px;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: var(--expired-soon);
+    margin-top: 2px;
+  }
+
+  .expiry-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--expired-soon);
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  /* Corner decorations */
+  .corner-tl, .corner-br {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .corner-tl {
+    top: 4px; left: 6px;
+    border-top: 1px solid var(--accent);
+    border-left: 1px solid var(--accent);
+  }
+  .corner-br {
+    bottom: 4px; right: 6px;
+    border-bottom: 1px solid var(--accent);
+    border-right: 1px solid var(--accent);
+  }
+  .code-card:hover .corner-tl,
+  .code-card:hover .corner-br { opacity: 0.6; }
+
+  /* Stagger animation delays */
+  .code-card:nth-child(1)  { animation-delay: 0.05s; }
+  .code-card:nth-child(2)  { animation-delay: 0.10s; }
+  .code-card:nth-child(3)  { animation-delay: 0.15s; }
+  .code-card:nth-child(4)  { animation-delay: 0.20s; }
+  .code-card:nth-child(5)  { animation-delay: 0.25s; }
+  .code-card:nth-child(6)  { animation-delay: 0.30s; }
+  .code-card:nth-child(7)  { animation-delay: 0.35s; }
+  .code-card:nth-child(8)  { animation-delay: 0.40s; }
+  .code-card:nth-child(9)  { animation-delay: 0.45s; }
+  .code-card:nth-child(10) { animation-delay: 0.50s; }
+
+  @keyframes slideIn {
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes fadeSlideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Toast */
+  #toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--panel);
+    border: 1px solid var(--xp);
+    color: var(--xp);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    padding: 12px 24px;
+    clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+    box-shadow: 0 0 20px rgba(0,255,136,0.3);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    white-space: nowrap;
+  }
+
+  #toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+  }
+
+  /* Search box */
+  .search-wrap {
+    margin-bottom: 30px;
+    position: relative;
+    animation: fadeIn 1.5s ease forwards;
+  }
+
+  .search-wrap::before {
+    content: '//';
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent);
+    font-size: 14px;
+    letter-spacing: -2px;
+    pointer-events: none;
+  }
+
+  #search {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 2px;
+    padding: 14px 14px 14px 40px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  #search:focus {
+    border-color: var(--accent);
+    box-shadow: var(--glow);
+  }
+
+  #search::placeholder { color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <p class="title-tag">// OYUN KODU VERİTABANI //</p>
+    <div class="header-line"></div>
+    <h1>KOD MERKEZİ</h1>
+    <div class="header-line"></div>
+    <p class="subtitle">AKTİF KODLAR · XP & GOLD ÖDÜLLÜ</p>
+    <div class="stats-bar">
+      <div class="stat-chip">TEK KULLANIMLIK <span>10</span> KOD</div>
+      <div class="stat-chip">SÜRELİ <span>5</span> KOD</div>
+      <div class="stat-chip">TOPLAM <span>15</span> KAYIT</div>
+    </div>
+  </header>
+
+  <div class="search-wrap">
+    <input type="text" id="search" placeholder="KOD ARA...">
+  </div>
+
+  <!-- SECTION 1: Permanent codes -->
+  <div class="section-header permanent">
+    <div class="section-icon"></div>
+    <span class="section-label permanent">TEK KULLANIMLIK KODLAR</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="codes-grid" id="permanent-grid">
+
+    <div class="code-card" data-code="GHOST7XP">
+      <div class="corner-tl"></div>
+      <div class="corner-br"></div>
+      <div class="code-left">
+        <div class="code-string">GHOST7XP</div>
+        <div class="code-rewards">
+          <div class="reward-badge xp"><span class="reward-icon">⚡</span><span class="reward-value">+250 XP</span></div>
+          <span class="reward-sep">|</span>
+          <div class="reward-badge gold"><span class="reward-icon">◈</span><span class="reward-value">+50 GOLD</span></div>
+        </div>
+      </div>
+      <button class="copy-btn" onclick="copyCode(this, 'GHOST7XP')">KOPYALA</button>
+    </div>
+
+    <div class="code-card" data-code="SHDW29MK">
+      <div class="corner-tl"></div><div class="corner-br"></div>
+      <div class="code-left">
+        <div class="code-string">SHDW29MK</div>
+        <div class="code-rewards">
+          <div class="reward-badge xp"><span class="reward-icon">⚡</span><span class="reward-value">+500 XP</span></div>
+          <span class="reward-sep">|</span>
+          <div class="reward-badge gold"><span class="reward-icon">◈</span><span class="reward-value">+75 GOLD</span></div>
+        </div>
+      </div>
+      <button class="copy-btn" onclick="copyCode(this, 'SHDW29MK')">KOPYALA</button>
+    </div>
+
+    <div class="code-card" data-code="VOID8KX2">
+      <div class="corner-tl"></div><div class="corner-br"></div>
+      <div class="code-left">
+        <div class="code-string">VOID8KX2</div>
+        <div class="code-rewards">
+          <div class="reward-badge xp"><span class="reward-icon">⚡</span><span class="reward-value">+750 XP</span></div>
+          <span class="reward-sep">|</span>
+          <div class="reward-badge gold"><span class="reward-icon">◈</span><span class="reward-value">+100 GOLD</span></div>
+        </div>
+      </div>
+      <button class="copy-btn" onclick="copyCode(this, 'VOID8KX2')">KOPYALA</button>
+    </div>
+
+    <div class="code-card" data-code="PHNT4R9A">
+      <div class="corner-tl"></div><div class="corner-br"></div>
+      <div class="code-left">
+        <div class="code-string">PHNT4R9A</div>
+        <div class="code-rewards">
+          <div class="reward-badge xp"><span class="reward-icon">⚡</span><span class="reward-value">+1.000 XP</span></div>
+          <span class="reward-sep">|</span>
+          <div class="reward-badge gold"><span class="reward-icon">◈</span><span class="reward-value">+125 GOLD</span></div>
+        </div>
+      </div>
+      <button class="copy-btn" onclick="copyCode(this, 'PHNT4R9A')">KOPYALA</button>
+    </div>
+
+    <div class="code-card" data-code="CYBR5TQ8">
+      <div class="corner-tl"></div><div class="corner-br"></div>
+      <div class="code-left">
+        <div class="code-string">CYBR5TQ8</div>
+        <div class="code-rewards">
+          <div class="reward-badge xp"><span class="reward-icon">⚡</span><span class="reward-value">+1.500 XP</span></div>
+          <span class="reward-sep">|</span>
+          <div class="reward-badge gold"><span class="reward-icon">◈</span><span class="reward-value">+150 GOLD</span></div>
+        </div>
+      </div>
+      <button class="copy-btn" onclick="copyCode(this, 'CYBR5TQ8')">KOPYALA</button>
+    </div>
+
+    <div class="code-card" data-code="AURA7N3X">
+      <div class="corner-tl"></div><div class="corner-br"></div>
+      <div class="code-left">
+        <div class="code-string">AURA7N3X</div>
+        <div class="code-rewards">
+          <div class="reward-badge xp"><span class="reward-icon">⚡</span><span class="reward-value">+2.000 XP</span></div>
+          <span class="reward-sep">|</span>
+          <div class="reward-badge gold"><span class="reward-icon">◈</span><span class="reward-value">+175 GOLD</span></div>
+        </div>
+      </div>
+      <button class="copy-btn" onclick="copyCode(this, 'AURA7N3X')">KOPYALA</button>
+    </div>
+
+    <div class="code-card" data-code="F0CUS92L">
+      <div class="corner-tl"></div><div class="corner-br"></div>
+      <div class="code-left">
+        <div class="code-string">F0CUS92L</div>
+        <div class="code-rewards">
+          <div class="reward-badge xp"><span class="reward-icon">⚡</span><span class="reward-value">+2.500 XP</span></div>
+          <span class="reward-sep">|</span>
+          <div class="reward-badge gold"><span class="reward-icon">◈</span><span class="reward-value">+200 GOLD</span></div>
+        </div>
+      </div>
+      <button class="copy-btn" onclick="copyCode(this, 'F0CUS92L')">KOPYALA</button>
+    </div>
+
+    <div class="code-card" data-code="ECLP4S6V">
+      <div class="corner-tl"></div><div class="corner-br"></div>
+      <div class="code-left">
+        <div class="code-string">ECLP4S6V</div>
+        <div class="code-rewards">
+          <div class="reward-badge xp"><span class="reward-icon">⚡</span><span class="reward-value">+5.000 XP</span></div>
+          <span class="reward-sep">|</span>
+          <div class="reward-badge gold"><span class="reward-icon">◈</span><span class="reward-value">+250 GOLD</span></div>
+        </div>
+      </div>
+      <button class="copy-btn" onclick="copyCode(this, 'ECLP4S6V')">KOPYALA</button>
+    </div>
+
+    <div class="code-card" data-code="WRA1TH8K">
+      <div class="corner-tl"></div><div class="corner-br"></div>
+      <div class="code-left">
+        <div class="code-string">WRA1TH8K</div>
+        <div class="code-rewards">
+          <div class="reward-badge xp"><span class="reward-icon">⚡</span><span class="reward-value">+7.500 XP</span></div>
+          <span class="reward-sep">|</span>
+          <div class="reward-badge gold"><span class="reward-icon">◈</span><span class="reward-value">+500 GOLD</span></div>
+        </div>
+      </div>
+      <button class="copy-btn" onclick="copyCode(this, 'WRA1TH8K')">KOPYALA</button>
+    </div>
+
+    <div class="code-card" data-code="GHLORD99">
+      <div class="corner-tl"></div><div class="corner-br"></div>
+      <div class="code-left">
+        <div class="code-string">GHLORD99</div>
+        <div class="code-rewards">
+          <div class="reward-badge xp"><span class="reward-icon">⚡</span><span class="reward-value">+10.000 XP</span></div>
+          <span class="reward-sep">|</span>
+          <div class="reward-badge gold"><span class="reward-icon">◈</span><span class="reward-value">+1.000 GOLD</span></div>
+        </div>
+      </div>
+      <button class="copy-btn" onclick="copyCode(this, 'GHLORD99')">KOPYALA</button>
+    </div>
+
+  </div>
+
+  <!-- SECTION 2: Limited codes -->
+  <div class="section-header limited">
+    <div class="section-icon"></div>
+    <span class="section-label limited">SÜRELİ KODLAR</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="codes-grid" id="limited-grid">
+
+    <div class="code-card limited-card" data-code="SUMR8X21">
+      <div class="corner-tl"></div><div class="corner-br"></div>
+      <div class="code-left">
+        <div class="code-string">SUMR8X21</div>
+        <div class="code-rewards">
+          <div class="reward-badge xp"><span class="reward-icon">⚡</span><span class="reward-value">+1.000 XP</span></div>
+          <span class="reward-sep">|</span>
+          <div class="reward-badge gold"><span class="reward-icon">◈</span><span class="reward-value">+100 GOLD</span></div>
+        </div>
+        <div class="expiry-badge"><div class="expiry-dot"></div>SON: 31 TEMMUZ 2026</div>
+      </div>
+      <button class="copy-btn" onclick="copyCode(this, 'SUMR8X21')">KOPYALA</button>
+    </div>
+
+    <div class="code-card limited-card" data-code="FOCUS7QK">
+      <div class="corner-tl"></div><div class="corner-br"></div>
+      <div class="code-left">
+        <div class="code-string">FOCUS7QK</div>
+        <div class="code-rewards">
+          <div class="reward-badge xp"><span class="reward-icon">⚡</span><span class="reward-value">+1.500 XP</span></div>
+          <span class="reward-sep">|</span>
+          <div class="reward-badge gold"><span class="reward-icon">◈</span><span class="reward-value">+125 GOLD</span></div>
+        </div>
+        <div class="expiry-badge"><div class="expiry-dot"></div>SON: 15 AĞUSTOS 2026</div>
+      </div>
+      <button class="copy-btn" onclick="copyCode(this, 'FOCUS7QK')">KOPYALA</button>
+    </div>
+
+    <div class="code-card limited-card" data-code="GHOST6MN">
+      <div class="corner-tl"></div><div class="corner-br"></div>
+      <div class="code-left">
+        <div class="code-string">GHOST6MN</div>
+        <div class="code-rewards">
+          <div class="reward-badge xp"><span class="reward-icon">⚡</span><span class="reward-value">+1.750 XP</span></div>
+          <span class="reward-sep">|</span>
+          <div class="reward-badge gold"><span class="reward-icon">◈</span><span class="reward-value">+150 GOLD</span></div>
+        </div>
+        <div class="expiry-badge"><div class="expiry-dot"></div>SON: 1 EYLÜL 2026</div>
+      </div>
+      <button class="copy-btn" onclick="copyCode(this, 'GHOST6MN')">KOPYALA</button>
+    </div>
+
+    <div class="code-card limited-card" data-code="VOID4PZ9">
+      <div class="corner-tl"></div><div class="corner-br"></div>
+      <div class="code-left">
+        <div class="code-string">VOID4PZ9</div>
+        <div class="code-rewards">
+          <div class="reward-badge xp"><span class="reward-icon">⚡</span><span class="reward-value">+2.000 XP</span></div>
+          <span class="reward-sep">|</span>
+          <div class="reward-badge gold"><span class="reward-icon">◈</span><span class="reward-value">+175 GOLD</span></div>
+        </div>
+        <div class="expiry-badge"><div class="expiry-dot"></div>SON: 15 EYLÜL 2026</div>
+      </div>
+      <button class="copy-btn" onclick="copyCode(this, 'VOID4PZ9')">KOPYALA</button>
+    </div>
+
+    <div class="code-card limited-card" data-code="PHNT8RX5">
+      <div class="corner-tl"></div><div class="corner-br"></div>
+      <div class="code-left">
+        <div class="code-string">PHNT8RX5</div>
+        <div class="code-rewards">
+          <div class="reward-badge xp"><span class="reward-icon">⚡</span><span class="reward-value">+2.500 XP</span></div>
+          <span class="reward-sep">|</span>
+          <div class="reward-badge gold"><span class="reward-icon">◈</span><span class="reward-value">+200 GOLD</span></div>
+        </div>
+        <div class="expiry-badge"><div class="expiry-dot"></div>SON: 1 EKİM 2026</div>
+      </div>
+      <button class="copy-btn" onclick="copyCode(this, 'PHNT8RX5')">KOPYALA</button>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>// KOD MERKEZİ · TÜM KODLAR KAYITLIDIR · AKTİF VERİTABANI //</p>
+  </footer>
+
+</div>
+
+<div id="toast">✓ KOD PANOYA KOPYALANDI</div>
+
+<script>
+  function copyCode(btn, code) {
+    navigator.clipboard.writeText(code).then(() => {
+      btn.textContent = '✓ KOPYALANDI';
+      btn.classList.add('copied');
+      showToast(code + ' KOPYALANDI');
+      setTimeout(() => {
+        btn.textContent = 'KOPYALA';
+        btn.classList.remove('copied');
+      }, 2000);
+    }).catch(() => {
+      // Fallback
+      const el = document.createElement('textarea');
+      el.value = code;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      btn.textContent = '✓ KOPYALANDI';
+      btn.classList.add('copied');
+      showToast(code + ' KOPYALANDI');
+      setTimeout(() => {
+        btn.textContent = 'KOPYALA';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.textContent = '⚡ ' + msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  // Search
+  document.getElementById('search').addEventListener('input', function() {
+    const q = this.value.toUpperCase().trim();
+    document.querySelectorAll('.code-card').forEach(card => {
+      const code = card.dataset.code || '';
+      card.style.display = code.includes(q) ? '' : 'none';
+    });
+  });
+</script>
+</body>
+</html>
